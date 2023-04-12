@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Homework12
 {
-    internal interface ITransfer<T1, T2>
-        where T1 : BankCheck
-        where T2 : BankCheck
+    internal interface ITransfer
     {
-        void Transfer (T1 t1, T2 t2, int _cash);
+        void TopUp(float cash);
+        bool Withdraw(float cash);
+        void Transfer<T>(T t1, T t2, float cash);
     }
 }

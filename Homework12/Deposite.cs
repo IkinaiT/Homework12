@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Homework12
 {
-    internal class Deposite : BankCheck
+    internal class Deposite<T> : BankCheck<T>
     {
-        public Deposite(string userName) : base(userName)
+        public Deposite(T userName) : base(userName)
         {
         }
     }

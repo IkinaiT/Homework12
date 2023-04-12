@@ -22,5 +22,50 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Button x:Name="AddButton" 
+                Command="{Binding AddCheckCommand}"
+                Grid.Column="1" 
+                Margin="10,0,0,10" 
+                Content="Добавить" 
+                Height="30" 
+                Width="130" 
+                RenderTransformOrigin="0.5,0.5" 
+                VerticalAlignment="Bottom" 
+                HorizontalAlignment="Left"/>
+        <Button x:Name="DeleteButton" 
+            Command="{Binding DeleteCheckCommand}"
+            CommandParameter="{Binding SelectedCheck}"
+            Grid.Column="1" 
+            Margin="0,0,10,10" 
+            Content="Удалить" 
+            Height="30" 
+            Width="130" 
+            RenderTransformOrigin="0.5,0.5" 
+            VerticalAlignment="Bottom" 
+            HorizontalAlignment="Right"/>
+        <ListBox ItemsSource="{Binding BankChecks}" SelectedItem="{Binding SelectedCheckTransaction}" Grid.Column="1" Margin="10,10,10,217">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="{Binding UserName}" FontSize="14"/>
+                        <TextBlock Text="{Binding GetID}" FontSize="10"/>
+                        <TextBlock Text="{Binding Cash}" FontSize="10" Foreground="Gray"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label Grid.Column="1" Content="Сумма перевода" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top"/>
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="117,226,0,0" TextWrapping="Wrap" Text="{Binding Cash, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="TransactionButton" 
+            Command="{Binding TransactionCommand}"
+            CommandParameter="{Binding CanTransaction}"
+            Grid.Column="1" 
+            Margin="260,0,0,180" 
+            Content="Добавить" 
+            Height="30" 
+            Width="130" 
+            RenderTransformOrigin="0.5,0.5" 
+            VerticalAlignment="Bottom" 
+            HorizontalAlignment="Left"/>
     </Grid>
 </Window>

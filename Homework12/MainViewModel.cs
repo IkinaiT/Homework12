@@ -8,31 +8,91 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
+using WpfApp2;
 
 namespace Homework12
 {
     internal class MainViewModel : INotifyPropertyChanged
     {
-        public int _cash = 0;
-        public ObservableCollection<BankCheck> BankChecks;
+        public ObservableCollection<BankCheck<string>> BankChecks { get; set; }
 
-        private BankCheck selectedCheck;
-        public BankCheck SelectedCheck
+        private BankCheck<string> selectedCheck;
+        public BankCheck<string> SelectedCheck
         {
             get { return selectedCheck; }
-            set { selectedCheck = value; }
+            set
+            {
+                selectedCheck = value;
+                OnPropertyChanged("SelectedCheck");
+            }
         }
 
+        private BankCheck<string> selectedCheckTransaction;
+        public BankCheck<string> SelectedCheckTransaction
+        {
+            get { return selectedCheckTransaction; }
+            set
+            {
+                selectedCheckTransaction = value; 
+                OnPropertyChanged("SelectedCheckTransaction");
+            }
+        }
+
+        private float _cash;
+        public float Cash
+        {
+            get { return _cash; }
+            set
+            {
+                _cash = value;
+                CanTransaction = SelectedCheck.Cash > Cash && SelectedCheck != null && SelectedCheckTransaction != null;
+                OnPropertyChanged("Cash");
+            }
+        }
+
+        private bool canTransaction;
+        public bool CanTransaction
+        {
+            get { return canTransaction; }
+            set
+            {
+                canTransaction = value;
+                OnPropertyChanged("CanTransaction");
+            }
+        }
+        private int i = 0;
         public MainViewModel()
         {
-            bool b = false;
-            BankChecks = new ObservableCollection<BankCheck>();
-            for(long i = 0; i < 1234567812345678; i++)
+            BankChecks = new ObservableCollection<BankCheck<string>>();
+            for(; i < 10; i++)
             {
-                if (b)
-                    BankChecks.Add(new NotDeposite("DUser" + i));
-                else
-                    BankChecks.Add(new Deposite("NDUser" + i));
+                AddUser();
+            }
+        }
+
+        private RelayCommand addChechCommand;
+        public RelayCommand AddCheckCommand
+        {
+            get
+            {
+                return addChechCommand ??
+                    (addChechCommand = new RelayCommand(obj =>
+                    {
+                        AddUser();
+                        i++;
+                    }));
+            }
+        }
+
+        private RelayCommand deleteCheckCommand;
+        public RelayCommand DeleteCheckCommand
+        {
+            get
+            {
+                return deleteCheckCommand ??
+                    (deleteCheckCommand = new RelayCommand(
+                        obj => BankChecks.Remove(SelectedCheck),
+                        obj => SelectedCheck != null));
             }
         }
 
@@ -41,6 +101,14 @@ namespace Homework12
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        private void AddUser()
+        {
+            if (i % 2 != 0)
+                BankChecks.Add(new NotDeposite<string>("NDUsername" + i));
+            else
+                BankChecks.Add(new Deposite<string>("DUsername" + i));
         }
     }
 }
