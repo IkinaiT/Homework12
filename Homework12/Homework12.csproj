@@ -58,9 +58,11 @@
     <Compile Include="BankCheck.cs" />
     <Compile Include="Deposite.cs" />
     <Compile Include="ITransfer.cs" />
+    <Compile Include="IWithdraw.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="NotDeposite.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="Transferer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

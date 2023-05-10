@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Homework12
 {
-    internal class Deposite : BankCheck
+    internal interface IWithdraw<out T>
+        where T : BankCheck
     {
-        public Deposite(string userName) : base(userName)
-        {
-        }
+        T Withdraw(float money);
     }
 }

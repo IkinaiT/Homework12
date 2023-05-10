@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Homework12
 {
-    internal class BankCheck<T> : INotifyPropertyChanged
+    internal class BankCheck : INotifyPropertyChanged
     {
         static private int ID = 0;
         private int currentID;
@@ -33,7 +33,7 @@ namespace Homework12
                 return s;
             }
         }
-        public T UserName { get; set; }
+        public string UserName { get; set; }
         private float cash;
         public float Cash
         {
@@ -48,12 +48,14 @@ namespace Homework12
             }
         }
 
-        public BankCheck(T userName)
+        public BankCheck(string userName)
         {
             UserName = userName;
             currentID = ID;
-            BankCheck<T>.ID++;
+            Cash = 10000;
+            BankCheck.ID++;
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

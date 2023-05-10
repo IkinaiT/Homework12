@@ -7,17 +7,18 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Media.Media3D;
 using WpfApp2;
 
 namespace Homework12
 {
-    internal class MainViewModel : INotifyPropertyChanged
+    internal class MainViewModel : Transferer, INotifyPropertyChanged
     {
-        public ObservableCollection<BankCheck<string>> BankChecks { get; set; }
+        public ObservableCollection<BankCheck> BankChecks { get; set; }
 
-        private BankCheck<string> selectedCheck;
-        public BankCheck<string> SelectedCheck
+        private BankCheck selectedCheck;
+        public BankCheck SelectedCheck
         {
             get { return selectedCheck; }
             set
@@ -27,8 +28,8 @@ namespace Homework12
             }
         }
 
-        private BankCheck<string> selectedCheckTransaction;
-        public BankCheck<string> SelectedCheckTransaction
+        private BankCheck selectedCheckTransaction;
+        public BankCheck SelectedCheckTransaction
         {
             get { return selectedCheckTransaction; }
             set
@@ -63,7 +64,7 @@ namespace Homework12
         private int i = 0;
         public MainViewModel()
         {
-            BankChecks = new ObservableCollection<BankCheck<string>>();
+            BankChecks = new ObservableCollection<BankCheck>();
             for(; i < 10; i++)
             {
                 AddUser();
@@ -96,6 +97,25 @@ namespace Homework12
             }
         }
 
+        private RelayCommand transactionCommand;
+        public RelayCommand TransactionCommand
+        {
+            get
+            {
+                return transactionCommand ??
+                    (transactionCommand = new RelayCommand(obj =>
+                    {
+                        Transfer<BankCheck>(SelectedCheck, SelectedCheckTransaction, Cash);
+                        SelectedCheckTransaction = null;
+                        IWithdraw<BankCheck> current = SelectedCheck;
+                    },
+                    obj => SelectedCheck != null && 
+                           SelectedCheckTransaction != null && 
+                           SelectedCheck != SelectedCheckTransaction &&
+                           Cash > 0));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
@@ -106,9 +126,16 @@ namespace Homework12
         private void AddUser()
         {
             if (i % 2 != 0)
-                BankChecks.Add(new NotDeposite<string>("NDUsername" + i));
+                BankChecks.Add(new BankCheck("NDUsername" + i));
             else
-                BankChecks.Add(new Deposite<string>("DUsername" + i));
+                BankChecks.Add(new BankCheck("DUsername" + i));
         }
+
+        public override void Transfer<T>(T t1, T t2, float cash)
+        {
+            t1.Cash -= Cash;
+            t2.Cash += Cash;
+        }
+
     }
 }

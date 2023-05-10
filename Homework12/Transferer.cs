@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Homework12
 {
-    internal class Deposite : BankCheck
+    internal class Transferer : ITransfer
     {
-        public Deposite(string userName) : base(userName)
+        public virtual void Transfer<T>(T t1, T t2, float cash) where T : BankCheck
         {
+            
         }
     }
 }

@@ -43,7 +43,7 @@
             RenderTransformOrigin="0.5,0.5" 
             VerticalAlignment="Bottom" 
             HorizontalAlignment="Right"/>
-        <ListBox ItemsSource="{Binding BankChecks}" SelectedItem="{Binding SelectedCheckTransaction}" Grid.Column="1" Margin="10,10,10,217">
+        <!--<ListBox ItemsSource="{Binding BankChecks}" SelectedItem="{Binding SelectedCheckTransaction}" Grid.Column="1" Margin="10,10,10,217">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
@@ -53,19 +53,31 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
-        <Label Grid.Column="1" Content="Сумма перевода" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="117,226,0,0" TextWrapping="Wrap" Text="{Binding Cash, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+        </ListBox>-->
+        <Label Grid.Column="1" Content="Сумма перевода" HorizontalAlignment="Left" Margin="5,75,0,0" VerticalAlignment="Top"/>
+        <TextBox Grid.Column="1" Margin="0,80,40,0" TextWrapping="Wrap" Text="{Binding Cash, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="TransactionButton" 
             Command="{Binding TransactionCommand}"
             CommandParameter="{Binding CanTransaction}"
             Grid.Column="1" 
-            Margin="260,0,0,180" 
-            Content="Добавить" 
+            Margin="0,75,5,0" 
+            Content="Перевести" 
             Height="30" 
             Width="130" 
             RenderTransformOrigin="0.5,0.5" 
-            VerticalAlignment="Bottom" 
-            HorizontalAlignment="Left"/>
+            VerticalAlignment="Top" 
+            HorizontalAlignment="Right"/>
+
+        <ComboBox Grid.Column="1" ItemsSource="{Binding BankChecks}" SelectedItem="{Binding SelectedCheckTransaction}" Margin="5" Height="50" VerticalAlignment="Top">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding UserName}" FontSize="14"/>
+                        <TextBlock Text="{Binding GetID}" FontSize="10"/>
+                        <TextBlock Text="{Binding Cash}" FontSize="10" Foreground="Gray"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
     </Grid>
 </Window>

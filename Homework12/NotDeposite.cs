@@ -7,9 +7,9 @@ using System.Windows;
 
 namespace Homework12
 {
-    internal class NotDeposite<T> : BankCheck<T>
+    internal class NotDeposite : BankCheck
     {
-        public NotDeposite(T userName) : base(userName)
+        public NotDeposite(string userName) : base(userName)
         {
         }
     }
