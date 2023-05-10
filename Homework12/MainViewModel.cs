@@ -107,7 +107,6 @@ namespace Homework12
                     {
                         Transfer<BankCheck>(SelectedCheck, SelectedCheckTransaction, Cash);
                         SelectedCheckTransaction = null;
-                        IWithdraw<BankCheck> current = SelectedCheck;
                     },
                     obj => SelectedCheck != null && 
                            SelectedCheckTransaction != null && 
