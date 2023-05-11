@@ -115,6 +115,20 @@ namespace Homework12
             }
         }
 
+        private RelayCommand withdrawChechCommand;
+        public RelayCommand WithdrawCommand
+        {
+            get
+            {
+                return withdrawChechCommand ??
+                    (withdrawChechCommand = new RelayCommand(obj =>
+                    {
+                        IWithdraw<BankCheck> withdraw = SelectedCheck;
+                        withdraw.Withdraw(Cash);
+                    }));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

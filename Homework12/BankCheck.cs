@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Homework12
 {
-    internal class BankCheck : INotifyPropertyChanged
+    internal class BankCheck : INotifyPropertyChanged, IWithdraw<BankCheck>
     {
         static private int ID = 0;
         private int currentID;
@@ -62,6 +62,12 @@ namespace Homework12
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        public BankCheck Withdraw(float money)
+        {
+            Cash -= money;
+            return null;
         }
     }
 }
