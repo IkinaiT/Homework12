@@ -13,10 +13,18 @@ using WpfApp2;
 
 namespace Homework12
 {
-    internal class MainViewModel : Transferer, INotifyPropertyChanged
+    
+
+    internal class MainViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Коллекция всех счетов
+        /// </summary>
         public ObservableCollection<BankCheck> BankChecks { get; set; }
 
+        /// <summary>
+        /// Выбранный в ListBox'е пользователь
+        /// </summary>
         private BankCheck selectedCheck;
         public BankCheck SelectedCheck
         {
@@ -28,6 +36,9 @@ namespace Homework12
             }
         }
 
+        /// <summary>
+        /// Выбранный в ComboBox'е пользователь
+        /// </summary>
         private BankCheck selectedCheckTransaction;
         public BankCheck SelectedCheckTransaction
         {
@@ -39,6 +50,9 @@ namespace Homework12
             }
         }
 
+        /// <summary>
+        /// Кол-во переволимых/снимаемых денег
+        /// </summary>
         private float _cash;
         public float Cash
         {
@@ -51,6 +65,9 @@ namespace Homework12
             }
         }
 
+        /// <summary>
+        /// Возможно ли совершить перевод
+        /// </summary>
         private bool canTransaction;
         public bool CanTransaction
         {
@@ -61,7 +78,15 @@ namespace Homework12
                 OnPropertyChanged("CanTransaction");
             }
         }
+        
+        /// <summary>
+        /// Итератор заполнения коллекции
+        /// </summary>
         private int i = 0;
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
         public MainViewModel()
         {
             BankChecks = new ObservableCollection<BankCheck>();
@@ -71,6 +96,9 @@ namespace Homework12
             }
         }
 
+        /// <summary>
+        /// Команда добавления счета
+        /// </summary>
         private RelayCommand addChechCommand;
         public RelayCommand AddCheckCommand
         {
@@ -85,6 +113,9 @@ namespace Homework12
             }
         }
 
+        /// <summary>
+        /// Команда удаления счета
+        /// </summary>
         private RelayCommand deleteCheckCommand;
         public RelayCommand DeleteCheckCommand
         {
@@ -97,6 +128,9 @@ namespace Homework12
             }
         }
 
+        /// <summary>
+        /// Команда перевода между счетами
+        /// </summary>
         private RelayCommand transactionCommand;
         public RelayCommand TransactionCommand
         {
@@ -105,8 +139,16 @@ namespace Homework12
                 return transactionCommand ??
                     (transactionCommand = new RelayCommand(obj =>
                     {
-                        Transfer<BankCheck>(SelectedCheck, SelectedCheckTransaction, Cash);
-                        SelectedCheckTransaction = null;
+                        ITransfer<BankCheck> t;
+                        ITransfer<Deposite> td = SelectedCheck as Deposite;
+                        ITransfer<NotDeposite> tnd = SelectedCheck as NotDeposite;
+                        if (td != null)
+                            t = td as BankCheck;
+                        else
+                            t = tnd as BankCheck;
+
+                        t.Transfer(SelectedCheckTransaction as BankCheck, Cash);
+
                     },
                     obj => SelectedCheck != null && 
                            SelectedCheckTransaction != null && 
@@ -115,6 +157,9 @@ namespace Homework12
             }
         }
 
+        /// <summary>
+        /// Команда снятия денег со счета
+        /// </summary>
         private RelayCommand withdrawChechCommand;
         public RelayCommand WithdrawCommand
         {
@@ -123,12 +168,23 @@ namespace Homework12
                 return withdrawChechCommand ??
                     (withdrawChechCommand = new RelayCommand(obj =>
                     {
-                        IWithdraw<BankCheck> withdraw = SelectedCheck;
+                        IWithdraw<Deposite> scd = SelectedCheck as Deposite;
+                        IWithdraw<NotDeposite> scn = SelectedCheck as NotDeposite;
+                        IWithdraw<BankCheck> withdraw;
+
+                        if (scn != null)
+                            withdraw = scn;
+                        else
+                            withdraw = scd;
+
                         withdraw.Withdraw(Cash);
                     }));
             }
         }
 
+        /// <summary>
+        /// MVVM 
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
@@ -136,18 +192,15 @@ namespace Homework12
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
+        /// <summary>
+        /// Метод добавления пользователя
+        /// </summary>
         private void AddUser()
         {
             if (i % 2 != 0)
-                BankChecks.Add(new BankCheck("NDUsername" + i));
+                BankChecks.Add(new NotDeposite("NDUsername" + i));
             else
-                BankChecks.Add(new BankCheck("DUsername" + i));
-        }
-
-        public override void Transfer<T>(T t1, T t2, float cash)
-        {
-            t1.Cash -= Cash;
-            t2.Cash += Cash;
+                BankChecks.Add(new Deposite("DUsername" + i));
         }
 
     }

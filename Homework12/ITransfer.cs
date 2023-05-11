@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Homework12
 {
-    internal interface ITransfer
+    internal interface ITransfer<in T>
     {
-        void Transfer<T>(T t1, T t2, float cash) where T : BankCheck;
+        void Transfer(T t1, float cash);
     }
 }

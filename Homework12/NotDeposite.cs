@@ -7,10 +7,16 @@ using System.Windows;
 
 namespace Homework12
 {
-    internal class NotDeposite : BankCheck
+    internal class NotDeposite : BankCheck, IWithdraw<NotDeposite>
     {
         public NotDeposite(string userName) : base(userName)
         {
+        }
+
+        public NotDeposite Withdraw(float money)
+        {
+            Cash -= money;
+            return this;
         }
     }
 }

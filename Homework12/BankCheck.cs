@@ -9,9 +9,16 @@ using System.Windows;
 
 namespace Homework12
 {
-    internal class BankCheck : INotifyPropertyChanged, IWithdraw<BankCheck>
+    internal class BankCheck : INotifyPropertyChanged, ITransfer<BankCheck>
     {
+        /// <summary>
+        /// Глобальный счетчик ID
+        /// </summary>
         static private int ID = 0;
+
+        /// <summary>
+        /// Текущий ID
+        /// </summary>
         private int currentID;
         public int CurrentID 
         {
@@ -25,6 +32,10 @@ namespace Homework12
                 OnPropertyChanged("CurrentID");
             }
         }
+
+        /// <summary>
+        /// Метод получения текущего ID
+        /// </summary>
         public string GetID
         {
             get
@@ -33,7 +44,15 @@ namespace Homework12
                 return s;
             }
         }
+
+        /// <summary>
+        /// Имя пользователя счета
+        /// </summary>
         public string UserName { get; set; }
+
+        /// <summary>
+        /// Деньги на счету
+        /// </summary>
         private float cash;
         public float Cash
         {
@@ -48,6 +67,11 @@ namespace Homework12
             }
         }
 
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="userName">Имя пользователя</param>
         public BankCheck(string userName)
         {
             UserName = userName;
@@ -56,7 +80,9 @@ namespace Homework12
             BankCheck.ID++;
         }
 
-
+        /// <summary>
+        /// MVVM
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
@@ -64,10 +90,15 @@ namespace Homework12
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-        public BankCheck Withdraw(float money)
+        /// <summary>
+        /// Метод перевода денег между счетами
+        /// </summary>
+        /// <param name="t1">Куда переводим</param>
+        /// <param name="cash">Сумма</param>
+        public void Transfer(BankCheck t1, float cash)
         {
-            Cash -= money;
-            return null;
+            t1.Cash += cash;
+            this.Cash -= cash;
         }
     }
 }
